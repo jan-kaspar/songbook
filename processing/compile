@@ -1,0 +1,166 @@
+#!/bin/bash
+
+data_dir="/home/jkaspar/fun/songbook/local/data/"
+script_dir="/home/jkaspar/fun/songbook/local/processing"
+
+build_dir=".build"
+
+#----------------------------------------------------------------------------------------------------
+
+function Strip()
+{
+	sed -i 's|\\bsong.*$||;s|\\esong.*$||' "$1"
+}
+
+#----------------------------------------------------------------------------------------------------
+
+function PrepareTex()
+{
+	src="$1"
+	target="$2"
+	chords="$3"
+
+	echo "    prepare TeX: $src -> $target"
+
+	cp "$script_dir/header.tex" "compile.tex"
+
+	g=""
+	#g="$group"
+	#if [ "$g" == "unsorted" || "$g" == "other" ]
+	#then
+	#	g=""
+	#fi
+
+	echo "\bsong{$song}{$g}" >> "$2"
+	cat "$src" >> "$2"
+	echo "\esong" >> "$2"
+	cat "$script_dir/footer.tex" >> "$2"
+}
+#----------------------------------------------------------------------------------------------------
+
+function RunTex()
+{
+	src="$1"
+	target="$2"
+
+	echo "    run TeX: $src -> $target"
+
+	# run tex
+	echo "* TeX: $group/$song: $target"
+	pdftex -fmt encpdftex "$1" &> /dev/null || { echo "ERROR"; return; }
+
+	# clean
+	mv "compile.pdf" "$target"
+	rm -f *.log
+}
+
+#----------------------------------------------------------------------------------------------------
+
+function RunLilyPond()
+{
+	echo "    LilyPond"
+
+	## get number and page
+	#number=`cat "data.ly"|grep %%number`
+	#number=${number#*=}
+	#page=`cat "data.ly"|grep %%page`
+	#page=${page#*=}
+
+	#addText="$number"
+	#if [ -n "$number" ]; then addText="#$number"; fi
+
+	#if [ -n "$page" ]
+	#then
+	#	if [ -n "$addText" ]; then addText="$addText, "; fi
+	#	addText="${addText}page ${page}"
+	#fi
+
+	#if [ -n "$addText" ]; then addText=" ($addText)"; fi
+
+	tmp_file="compile.ly"
+	template="lilypond_template"
+	log_file="compile.log"
+
+	cat "$script_dir/$template" | sed "\
+		s|\$song|$song$addText|;\
+		s|\$group|$group|;\
+		s|\$input|../data.ly|;" > "$tmp_file"
+
+	lilypond -dbackend=eps "$tmp_file" &> "$log_file" || { echo "ERROR"; cat "$log_file"; return; }
+	rm "compile-systems.tex"
+
+	mv "compile.pdf" "lilypond.pdf"
+	mv "compile.midi" "../midi.midi"
+	#rm -f "$log_file"
+
+	# if midi exists, make also mp3
+	if [ -s "../midi.midi" ]
+	then
+		echo "    MP3"
+		timidity "../midi.midi" -Ow -o midi.wav &> midi.log && lame -V9 midi.wav ../midi.mp3 &>> midi.log && rm midi.wav && rm midi.log
+	fi
+}
+
+#----------------------------------------------------------------------------------------------------
+
+find "$data_dir" -mindepth 2 -type d|while read dir
+do
+	# directory with sources?
+	sources=`ls "$dir"|grep "data.tex\|data.ly"`
+	if [ -z "$sources" ]
+	then
+		continue
+	fi
+
+	buf="$dir"
+	song=${buf##*/}
+	buf=${buf%/*}
+	group=${buf##*/}
+	
+	echo "* $group : $song"
+
+	# init build directory
+	mkdir -p "$dir/$build_dir"
+	cd "$dir/$build_dir"
+
+	lilypondPresent=0
+	forceTex=0
+
+	# run lilypond
+	if [ -s "../data.ly" ]
+	then
+		lilypondPresent=1
+
+		if [ "compile.ly" -ot "../data.ly" ]
+		then
+			RunLilyPond || continue
+			forceTex=1
+		fi
+	fi
+
+	# prepare TeX
+	if [ -s "../data.tex" ]
+	then
+		if [ "compile.tex" -ot "../data.tex" ]
+		then
+			PrepareTex "../data.tex" "compile.tex"
+		fi
+	else
+		if [ $lilypondPresent -eq 1 ]
+		then
+			if [ ! -s "compile.tex" ]
+			then
+				echo "\\IncludeLilypond" > "default_data.tex"
+				PrepareTex "default_data.tex" "compile.tex"
+			fi
+		fi
+	fi
+
+	# run TeX
+	if [ "compile.tex" -nt "../score.pdf" -o $forceTex -eq 1 ]
+	then
+		RunTex "compile.tex" "../score.pdf"
+	fi
+
+	cd - > /dev/null
+done

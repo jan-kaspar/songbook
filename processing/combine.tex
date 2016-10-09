@@ -1,0 +1,62 @@
+\input utf8-t1
+\input songbook
+
+% this font has the right encoding
+\def\TextFontName{pplr8r } % the last space is important
+\def\RefFontName{pplb8r }
+\def\AnnotationFontName{pplb8r }
+\font\TitleFont = ec-qplb-sc at 25pt
+\font\AuthorFont = ec-qplr-sc at 18pt
+\font\InitialFont = ec-qplb-sc at 40pt
+\NormalFonts
+\TextFont
+
+\NoChords
+
+\bgroup
+\catcode`\^^M=\active
+\gdef\bsong@1@2@3{
+	\penalty-9000
+	\begingroup
+	\line{\AuthorFont @1: @3 (@2)\hss}%
+	\vskip\baselineskip
+	%
+	\global\VerseCounter = 0
+	%
+	\verse
+	\PrintAnnotationtrue
+	\AnnotatedVersefalse
+	\ForceVerseSeparatorfalse
+	\DoTranspositionfalse
+	\DefaultChordStyle
+	%
+	\NormalFonts
+	\TextFont
+	\cmyk{\TextColor}%
+	%
+	\def\ {\hskip1em}
+	%
+	\everypar={\HandleLine}%
+	\catcode`\^^M=\active%
+	\gdef\HandleLine@@1^^M{\ProcessLine{@@1}\TextLineEnd}%
+	\let^^M=\OtherLineEnd%
+}
+\egroup
+
+\def\esong{%
+	\everypar={}%
+	\ifAnnotatedVerse
+		\ProcessLine{}%
+	\fi
+	\endgroup
+	\vskip2\baselineskip
+}
+\bsong{Chant d'entré}{Vincent Buisset}{Dieu est là}
+\esong
+\bsong{Alléluia}{P.U.S.H.}{Alléluia}
+\esong
+\bsong{Agnus}{P.U.S.H.}{Agneau de Dieu}
+\esong
+\bsong{Sanctus}{P.U.S.H.}{Saint est le Seigneur}
+\esong
+\end

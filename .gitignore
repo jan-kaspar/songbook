@@ -1,0 +1,17 @@
+*.pdf
+*.log
+*.mp3
+*.midi
+
+*.png
+*.jpg
+*.JPG
+*.jpe
+*.gif
+*.doc
+
+*.swp
+*.swo
+
+*.build
+

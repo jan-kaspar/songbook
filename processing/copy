@@ -1,0 +1,13 @@
+#base="$HOME/temp/test"
+base="/mnt/chant/htdocs"
+
+find . -maxdepth 2 -mindepth 2 -type d|while read dir
+do
+	dir=${dir#./}
+	group=${dir%/*}
+	song=${dir#*/}
+	echo "* $group: $song"
+
+	mkdir -p "$base/$group"
+	cp -r "$dir" "$base/$group/$d"
+done

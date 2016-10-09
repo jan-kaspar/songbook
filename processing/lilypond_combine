@@ -1,0 +1,59 @@
+#!/bin/bash
+
+function Add()
+{
+	df="../data/$1/$2/data.ly"
+
+	# get number
+	number=`cat "$df"|grep %%number`
+	number=${number#*=}
+	if [ -n "$number" ]
+	then
+		number=" ($number)"
+	fi
+
+	# add block to combined source
+	(
+		echo ""
+		echo "\include \"$df\""
+		echo "\markup{\\bold \\fontsize #4 {$2$number}}"
+		echo "\score{"
+		#echo "	\header{ title=\"title\" }"
+		echo "	\FullLayout"
+		echo "}"
+		echo "\TextBelow"
+	) >> "lilypond_combine.ly"
+}
+
+#----------------------------------------------------------------------------------------------------
+
+rm -f "lilypond_combine.ly"
+
+(
+	echo "#(set-global-staff-size 16)"
+	echo "\paper{"
+	echo "	indent = 0\\cm"
+	echo "	ragged-right = ##f"
+	echo "}"
+) > "lilypond_combine.ly"
+
+#----------------------------------------------	------------------------------------------------------
+
+#Add "Taizé" "Ubi caritas"
+#Add "Taizé" "Jésus le Christ"
+#Add "Taizé" "Jesus, remember me"
+#Add "Taizé" "Ad te Jesu Christe"
+
+Add "Taizé" "Alleluia 11"
+Add "Taizé" "Kyrie 10"
+Add "Taizé" "Misericordias Domini"
+
+#Add "Taizé" "Amen"
+Add "Taizé" "Per crucem (canon)"
+Add "Taizé" "Retourne, mon âme, à ton repos"
+Add "Taizé" "Sanasi on lamppu"
+Add "Taizé" "O toi l'au-delà de tout"
+
+#----------------------------------------------------------------------------------------------------
+
+lilypond "lilypond_combine.ly"

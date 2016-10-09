@@ -1,0 +1,54 @@
+\input utf8-t1
+%\input utf8-csf
+\input songbook
+
+% for utf8-t1
+\def\TextFontName{pplr8r } % the last space is important
+\def\RefFontName{pplb8r }
+\def\AnnotationFontName{pplb8r }
+\font\TitleFont = ec-qplb-sc at 25pt
+\font\AuthorFont = ec-qplr-sc at 18pt
+\font\InitialFont = ec-qplb-sc at 40pt
+
+% for utf8-csf
+%\def\TextFontName{cs-qplr }
+%\def\RefFontName{cs-qplb }
+%\def\AnnotationFontName{cs-qplb }
+%\font\TitleFont = cs-qplb-sc at 25pt
+%\font\AuthorFont = cs-qplr-sc at 18pt
+%\font\InitialFont = cs-qplb-sc at 40pt
+
+\NormalFonts
+\TextFont
+
+\def\esong{%
+	\everypar={}%
+	\ifAnnotatedVerse
+		\ProcessLine{}%
+	\fi
+	\endgroup
+	\vfil\eject
+}
+
+\def\IncludeLilypond{%
+	\line{\pdfximage {lilypond.pdf}\pdfrefximage\pdflastximage\hss}%
+	\vskip5mm
+}
+
+\def\IncludeLilypondShift{%
+	\line{\hskip-1cm\pdfximage {lilypond.pdf}\pdfrefximage\pdflastximage\hss}%
+	\vskip5mm
+}
+
+\def\Include@1{%
+	\line{\pdfximage {@1}\pdfrefximage\pdflastximage\hss}%
+	\vskip5mm
+}
+
+\def\IncludeShift@1@2{%
+	\line{\hskip@2\pdfximage {@1}\pdfrefximage\pdflastximage\hss}%
+	\vskip5mm
+}
+
+\def\AddPicture@1@2@3@4{%
+}

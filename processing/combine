@@ -1,0 +1,20 @@
+#!/bin/bash
+
+function Add()
+{
+	echo "\bsong{$1}{$2}{$3}" >> "combine.tex"
+	#echo "\bsong{$2}{$3}" >> "combine.tex"
+	cat "$2/$3/accords.tex" >> "combine.tex"
+	echo "\esong" >> "combine.tex"
+}
+
+cp "header2.tex" "combine.tex"
+
+Add "Chant d'entré" "Vincent Buisset" "Dieu est là"
+Add "Alléluia" "P.U.S.H." "Alléluia"
+Add "Agnus" "P.U.S.H." "Agneau de Dieu"
+Add "Sanctus" "P.U.S.H." "Saint est le Seigneur"
+
+cat "footer.tex" >> "combine.tex"
+
+pdftex -fmt encpdftex "combine.tex" || echo "ERROR"
