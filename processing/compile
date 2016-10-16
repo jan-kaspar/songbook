@@ -22,7 +22,9 @@ function PrepareTex()
 
 	echo "    prepare TeX: $src -> $target"
 
-	cp "$script_dir/header.tex" "compile.tex"
+	cat "$script_dir/header.tex" | sed "\
+			s|\$script_dir|$script_dir|;
+   		" > "compile.tex"
 
 	g=""
 	#g="$group"
