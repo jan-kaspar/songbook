@@ -1,0 +1,664 @@
+\iffalse
+------------ TODO --------------
+* empty line after \etab
+\fi
+
+\input colors
+
+%----------------------------------------------------------------------------------------------------
+%-------------------- fonts, struts
+%----------------------------------------------------------------------------------------------------
+
+\font\TitleFont = cs-qplb-sc at 25pt
+\font\AuthorFont = cs-qplr-sc at 18pt
+\font\InitialFont = cs-qplb-sc at 40pt
+%\font\InitialFont = v_CurlzMT_cz at 40pt
+
+\def\TextFontName{cs-qplr }
+\def\RefFontName{cs-qplr }
+\def\AnnotationFontName{cs-qplb }
+
+\def\NormalFonts{%
+	\font\TextFont = \TextFontName at 12pt
+	\font\RefFont = \RefFontName at 12pt
+	\font\ChordFont = cs-qplr at 12pt
+	\font\ChordItalicsFont = cs-qplri at 12pt
+	\font\ChordScriptFont = cs-qplr at 9pt
+	\font\AnnotationFont = \AnnotationFontName at 12pt
+	% TODO
+	\font\TabFont = cs-qplr at 12pt
+	%\font\TabFont = ec-inconsolata at 12pt
+	\font\mathSymbFont = cmmi12 at 12pt
+	\textfont1=\mathSymbFont
+	%
+	\baselineskip14pt
+	%
+	\setbox\strutbox=\hbox{\vrule height10.2pt depth4.2pt width0pt}%
+	%
+	\def\ChordStrut{\vrule width0pt height9pt depth3pt}%
+}
+
+\def\SmallerFonts{%
+	\font\TextFont = \TextFontName at 10pt
+	\font\ChordFont = cs-qplr at 10pt
+	\font\ChordItalicsFont = cs-qplri at 10pt
+	\font\ChordScriptFont = cs-qplr at 7.5pt
+	\font\AnnotationFont = cs-qplb at 10pt
+	% TODO
+	\font\TabFont = cs-qplr at 10pt
+	%\font\TabFont = ec-inconsolata at 10pt
+	\font\mathSymbFont = cmmi12 at 10pt
+	\textfont1=\mathSymbFont
+	%
+	\baselineskip12pt
+	%
+	\setbox\strutbox=\hbox{\vrule height8.5pt depth3.5pt width0pt}%
+	%
+	\def\ChordStrut{\vrule width0pt height8pt depth2pt}%
+}
+
+
+%----------------------------------------------------------------------------------------------------
+%-------------------- layout, dimensions, skips, etc.
+%----------------------------------------------------------------------------------------------------
+
+\vsize=297mm
+\hsize=210mm
+
+% the actual space between text and page edges
+\newdimen\hmargin \hmargin=25mm
+\newdimen\vmargin \vmargin=15mm
+
+\hoffset=\hmargin \advance\hsize-2\hoffset \advance\hoffset-1in
+\voffset=\vmargin \advance\vsize-2\voffset \advance\voffset-1in
+
+% the horizontal unprintable margin
+\newdimen\PrinterMargin
+\PrinterMargin6mm
+
+\parindent0pt
+\lineskip0pt
+\lineskiplimit0pt
+
+%\footline = {\hfil\ChordScriptFont typeset with kaspi\TeX}
+\footline = {{\ChordItalicsFont \number\day. \number\month. \number\year\hfil \currentLabel \hfil\the\pageno}}
+
+\newskip\VerseSkip
+\VerseSkip=\baselineskip
+
+\newskip\TitleSkip
+\TitleSkip=2\baselineskip
+
+\newskip\InterChordSkip
+\InterChordSkip=1mm
+
+\newdimen\ColumnSeparation
+\ColumnSeparation=1cm
+
+%----------------------------------------------------------------------------------------------------
+%-------------------- colors
+%----------------------------------------------------------------------------------------------------
+
+\def\TextColor{\cBlack}
+\def\ChordColor{\cRed}
+\def\BassColor{\cBlue}
+\def\InitialBackgroundColor{\cmyk{0 0 0 0.4}}%
+\def\InitialForegroundColor{\cmyk{0 0 0 0}}%
+
+
+% # will be used for sharps, @ will replace it
+\catcode`\@=6
+\catcode`\#=11
+
+%----------------------------------------------------------------------------------------------------
+%-------------------- chord macros
+%----------------------------------------------------------------------------------------------------
+
+\newif\ifDoTransposition
+\newcount\TranspositionShift
+
+\def\transposition@1{%
+	\DoTranspositiontrue
+	\TranspositionShift@1
+}
+
+\def\FirstTone{C}
+\def\SecondTone{D}
+\def\ThirdTone{E}
+\def\FourthTone{F}
+\def\FifthTone{G}
+\def\SixthTone{A}
+\def\SeventhMinusTone{B}
+\def\SeventhTone{H}
+
+\def\CzechChordStyle{%
+	\def\SeventhMinusTone{B}%
+	\def\SeventhTone{H}%
+}
+
+\def\EnglishChordStyle{%
+	\def\SeventhMinusTone{}%
+	\def\SeventhTone{B}%
+}
+
+\def\DefaultChordStyle{}
+
+\newcount\ChordCode
+
+\def\ToneCodeToLabel{%
+	\ifcase\ChordCode%
+			C%
+		\or C$\sharp$%
+		\or D%
+		\or D$\sharp$%
+		\or E%
+		\or F%
+		\or F$\sharp$%
+		\or G%
+		\or G$\sharp$%
+		\or A%
+		\or A$\sharp$%
+		\or\SeventhTone%
+	\fi
+}
+
+\def\FrenchChordStyle{%
+	\def\ToneCodeToLabel{%
+		\ifcase\ChordCode%
+				Do%
+			\or Do$\sharp$%
+			\or Re%
+			\or Re$\sharp$%
+			\or Mi%
+			\or Fa%
+			\or Fa$\sharp$%
+			\or Sol%
+			\or Sol$\sharp$%
+			\or La%
+			\or La$\sharp$%
+			\or Si%
+		\fi
+	}
+}
+
+\def\ToneLabelToCode@1{%
+	\edef\temp{@1}%
+	\ifx\temp\FirstTone\ChordCode=0\fi
+	\ifx\temp\SecondTone\ChordCode=2\fi
+	\ifx\temp\ThirdTone\ChordCode4\fi
+	\ifx\temp\FourthTone\ChordCode5\fi
+	\ifx\temp\FifthTone\ChordCode7\fi
+	\ifx\temp\SixthTone\ChordCode9\fi
+	\ifx\temp\SeventhMinusTone\ChordCode10\fi
+	\ifx\temp\SeventhTone\ChordCode11\fi
+}
+
+\def\MakeChordBuffer@1{%
+	\def\ChordText{@1}%
+	\ifx\ChordText\empty
+		\def\ChordBuffer{}%
+	\else
+		\def\ChordBuffer{\ChordColor}%
+		\ProcessChordText
+		\edef\ChordBuffer{\ChordBuffer\TextColor}%
+	\fi
+}
+
+\def\ChordGetFirstChar@1@2\end{%
+	\def\ChordFirstChar{@1}%
+	\def\ChordText{@2}%
+}
+
+\def\ProcessChordText{%
+	\def\bChar{b}%
+	\def\sChar{#}%
+	\def\slChar{/}%
+	\def\cmChar{,}%
+	\def\mChar{m}%
+	\def\iChar{i}%
+	%
+	\def\ChordTone{}%
+	\def\ChordType{}%
+	\def\ChordAlternations{}%
+	%
+	\if\ChordText\empty
+	\else
+		\expandafter\ChordGetFirstChar\ChordText\end%
+		\edef\ChordTone{\ChordFirstChar}%
+		\ToneLabelToCode\ChordFirstChar
+		%
+		\if\ChordText\empty
+		\else
+			\expandafter\ChordGetFirstChar\ChordText\end%
+			\ifx\ChordFirstChar\sChar
+				\advance\ChordCode+1
+				\edef\ChordTone{\ChordTone$\sharp$}%
+			\else
+				\ifx\ChordFirstChar\bChar
+					\advance\ChordCode-1
+					\edef\ChordTone{\ChordTone$\flat$}%
+				\else
+					\edef\ChordText{\ChordFirstChar\ChordText}%
+				\fi
+			\fi
+		\fi
+		%
+		\ifDoTransposition
+			\advance\ChordCode\TranspositionShift
+			\ifnum\ChordCode>11
+				\advance\ChordCode-12
+			\fi
+			\ifnum\ChordCode<0
+				\advance\ChordCode+12
+			\fi
+			\edef\ChordTone{\ToneCodeToLabel}%
+		\fi
+	\fi
+	%
+	\ProcessChordType
+	%
+	\ChordFlushToBuffer
+}
+
+\def\ProcessChordType{%
+	\ifx\ChordText\empty
+	\else
+		\expandafter\ChordGetFirstChar\ChordText\end%
+		%
+		\ifx\ChordFirstChar\slChar
+			\ChordFlushToBuffer
+			\edef\ChordBuffer{\ChordBuffer\TextColor/\BassColor}%
+			\ProcessChordText	
+		\else
+			\ifx\ChordFirstChar\cmChar
+				\ChordFlushToBuffer
+				\edef\ChordBuffer{\ChordBuffer\hskip\InterChordSkip\ChordColor}%
+				\ProcessChordText	
+			\else
+				\ifcat\ChordFirstChar1%
+					\edef\ChordAlternations{\ChordAlternations\ChordFirstChar}%
+				\else
+					\if\ChordFirstChar\mChar
+						\edef\ChordType{\ChordType m}%
+						\ifx\ChordText\empty
+						\else
+							\expandafter\ChordGetFirstChar\ChordText\end%
+							\ifx\ChordFirstChar\iChar
+							\else
+								\edef\ChordText{\ChordFirstChar\ChordText}%
+							\fi
+						\fi
+					\else
+						\edef\ChordType{\ChordType\ChordFirstChar}%
+					\fi
+				\fi
+			\fi
+		\fi
+		%
+		\ProcessChordType
+	\fi
+}
+
+\def\ChordFlushToBuffer{%
+	\ifx\ChordTone\empty
+	\else
+		\edef\ChordBuffer{%
+			\ChordBuffer
+			{\ChordFont\ChordTone}%
+			{\ChordItalicsFont\ChordType}%
+			\raise3pt\hbox{\ChordScriptFont\ChordAlternations}%
+		}%
+		\def\ChordTone{}%
+		\def\ChordType{}%
+		\def\ChordAlternations{}%
+	\fi
+}
+
+\def\NoChords{%
+	\def\MakeChordBuffer@@1{}%
+}
+
+%----------------------------------------------------------------------------------------------------
+%-------------------- verses and refrains
+%----------------------------------------------------------------------------------------------------
+
+\newcount\VerseCounter
+\newif\ifAnnotatedVerse
+\newif\ifPrintAnnotation
+\def\VerseAnnotation{}
+
+\def\verse{%
+	\AnnotatedVersefalse
+}
+
+\def\annotate@1{%
+	\AnnotatedVersetrue
+	\xdef\VerseAnnotation{@1}%
+	\TextFont
+}
+
+\let\annot=\annotate
+
+\def\ref{%
+	\annotate{R:}%
+	\RefFont
+}
+
+\def\plain{%
+	\annotate{}%
+}
+
+\def\lside@1{%
+	\noindent
+	\llap{\AnnotationFont@1\hskip2mm}%
+}
+
+\def\AddVerseAnnotation{%
+	\ifPrintAnnotation
+		\ifAnnotatedVerse
+			\lside{\VerseAnnotation}%
+		\else
+			\global\advance\VerseCounter by 1
+			\lside{\the\VerseCounter .}%
+			\TextFont
+		\fi
+		\verse
+		\PrintAnnotationfalse
+	\fi
+}
+
+%----------------------------------------------------------------------------------------------------
+%-------------------- titles
+%----------------------------------------------------------------------------------------------------
+
+\def\Nothing@1{%
+	\setbox0\hbox{@1}%
+}
+
+\def\SetInitial@1{%
+	\gdef\Initial{@1}%
+}
+
+\def\WithBlackBackground@1{%
+	\bgroup
+		\advance\PrinterMargin+50pt
+		\InitialBackgroundColor%
+		\rlap{\vrule height37pt width\PrinterMargin depth13pt}%
+	\egroup
+	\InitialForegroundColor%
+	\hbox to50pt{\hss@1\hss}%
+	\hskip\PrinterMargin
+	\TextColor%
+}
+
+% PDF bookmark counter
+\newcount\pdfMarkNumber
+\pdfMarkNumber=0
+
+\def\currentLabel{}
+
+\def\MakeTitle@1@2{%
+	%
+	\def\temp{@2}%
+	\ifx\temp\empty
+		\xdef\currentLabel{@1}
+	\else
+		\xdef\currentLabel{@1 (@2)}
+	\fi
+	%
+	\global\advance\pdfMarkNumber by1
+	\pdfdest num \pdfMarkNumber xyz
+	\xdef\pdfChapterMarkNum{\the\pdfMarkNumber}%	
+	\pdfoutline goto num \pdfChapterMarkNum count 0 {@1 (@2)}%
+	%
+	\Nothing{\SetInitial@1}%
+	\line{%
+		\hss
+		\TitleFont@1%
+		\hss
+		\rlap{%
+			\hbox to\hmargin{%
+				\hss
+				\vbox to0pt{%
+					\vss
+					\hbox{\WithBlackBackground{\InitialFont\Initial}}%
+					\vss
+				}%
+			}%
+		}%
+	}%
+	%
+	\vskip2mm
+	%
+	\def\temp{@2}%
+	\ifx\temp\empty
+		\vskip\baselineskip
+	\else
+		\line{\AuthorFont\hss@2\hss}%
+	\fi
+	%
+	\vskip\TitleSkip
+}
+
+%----------------------------------------------------------------------------------------------------
+%-------------------- song data parsing
+%----------------------------------------------------------------------------------------------------
+
+\bgroup
+\catcode`\^^M=\active
+\gdef\bsong@1@2{
+	\begingroup
+	\MakeTitle{@1}{@2}%
+	%
+	\global\VerseCounter = 0
+	%
+	\verse
+	\PrintAnnotationtrue
+	\AnnotatedVersefalse
+	\ForceVerseSeparatorfalse
+	\DoTranspositionfalse
+	\DefaultChordStyle
+	%
+	\NormalFonts
+	\TextFont
+	\TextColor%
+	%
+	\def\ {\hskip1em}
+	%
+	\everypar={\HandleLine}%
+	\catcode`\^^M=\active%
+	\gdef\HandleLine@@1^^M{\ProcessLine{@@1}\TextLineEnd}%
+	\let^^M=\OtherLineEnd%
+}
+\egroup
+
+\def\esong{%
+	\everypar={}%
+	\ifAnnotatedVerse
+		\ProcessLine{}%
+	\fi
+	\endgroup
+	\vfil\eject
+	\ifodd\pageno
+	\else
+		\bgroup
+			\footline={}
+			\hbox{}
+			\vfil\eject
+		\egroup
+	\fi	
+	
+	\xdef\currentLabel{}
+}
+
+\def\ProcessLine@1{%
+	\def\ChordBuffer{}%
+	\AddVerseAnnotation
+	%\vrule
+	\SubProcessLine@1[]\end
+	\def\VerseAnnotation{}%
+}
+
+\def\SubProcessLine@1[@2]@3\end{%
+	\vbox{%
+		\offinterlineskip
+		\ifx\ChordBuffer\empty
+			%\hbox{}%
+		\else
+			\hbox{\ChordColor\ChordStrut\ChordBuffer\hskip\InterChordSkip}%
+		\fi
+		\def\temp{@1}%
+		\hbox{\strut@1}%
+	}%
+	%
+	\MakeChordBuffer{@2}%
+	%
+	\def\temp{@3}%
+	\ifx\temp\empty
+		\def\next{}%
+	\else
+		\def\next{\SubProcessLine@3\end}%
+	\fi
+	\next
+}
+
+\newif\ifForceVerseSeparator
+
+\def\TextLineEnd@1{%
+	\endgraf
+	\ifx@1\OtherLineEnd
+		\VerseSeparator
+	\else
+		\ifForceVerseSeparator
+			\VerseSeparator
+			\ForceVerseSeparatorfalse
+		\fi
+	\fi
+	@1%
+}
+
+\def\OtherLineEnd@1{%
+	\ifx@1\OtherLineEnd
+		\ifAnnotatedVerse
+			\ForceVerseSeparatortrue
+			\leavevmode
+		\fi
+	\fi
+	@1%
+}
+
+\def\VerseSeparator{%
+	%\hrule
+	\vskip\VerseSkip
+	%\hrule
+	\PrintAnnotationtrue
+}
+
+%----------------------------------------------------------------------------------------------------
+%-------------------- two-column typesetting
+%----------------------------------------------------------------------------------------------------
+
+\def\bcol{%
+	\hbox\bgroup%
+		\vtop\bgroup
+			\advance\hsize-\ColumnSeparation\divide\hsize2
+}
+
+\def\ncol{%
+		\egroup
+		\hskip\ColumnSeparation%
+		\vtop\bgroup
+			\advance\hsize-\ColumnSeparation\divide\hsize2
+}
+
+\def\ecol{%
+		\egroup
+	\egroup
+}
+
+%----------------------------------------------------------------------------------------------------
+%-------------------- extra/non-formatted sections
+%----------------------------------------------------------------------------------------------------
+
+\def\ExtraEveryPar{%
+	\ifAnnotatedVerse
+		\lside{\VerseAnnotation}%
+	\fi
+	\everypar={}%
+}
+
+\def\noobeylines{%
+	\catcode`\^^M=5
+}
+
+\def\bextra{%
+	\bgroup%
+	\noobeylines%
+	\everypar={\ExtraEveryPar}%
+}
+
+\def\eextra{%
+	\egroup
+	\par
+	\VerseSeparator
+	\verse
+}
+
+%----------------------------------------------------------------------------------------------------
+%-------------------- tabulatures
+%----------------------------------------------------------------------------------------------------
+
+\def\ObeyLines{%
+	\def\par{%
+		\endgraf
+		\leavevmode
+	}%
+	\obeylines
+}
+
+\def\btab{%
+	\bgroup%
+		\everypar={\ExtraEveryPar}%
+		\TabFont
+		\def\par{\endgraf}%
+		\ObeyLines
+		\obeyspaces
+}
+
+\def\etab{%
+	\unskip
+	\egroup
+	\VerseSeparator
+	\verse
+}
+
+%----------------------------------------------------------------------------------------------------
+%-------------------- repetitions
+%----------------------------------------------------------------------------------------------------
+
+\def\brep{%
+	\leavevmode
+	%\hbox{\vrule height10pt depth2pt}%
+	%\hskip0.5ex
+	%\hbox{\vrule height10pt depth2pt}%
+	%\hskip0.5ex
+	\char91:
+}
+
+\def\erep{%
+	\hskip0.5ex
+	:\char93
+	%\hbox{\vrule height10pt depth2pt}%
+	%\hskip0.5ex
+	%\hbox{\vrule height10pt depth2pt}%
+}
+
+\def\comment@1{{\ChordItalicsFont@1}}
+
+%----------------------------------------------------------------------------------------------------
+%-------------------- initial settings
+%----------------------------------------------------------------------------------------------------
+
+\NormalFonts
+\TextFont
+\TextColor
