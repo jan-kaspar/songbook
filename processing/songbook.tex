@@ -368,6 +368,20 @@
 }
 
 %----------------------------------------------------------------------------------------------------
+%-------------------- table of contents
+%----------------------------------------------------------------------------------------------------
+
+\def\tocBuffer{}
+
+\def\MakeTOCLine@1@2{%
+	\line{\strut@1\ \leaders\hbox{.\ } \hfil\ @2}
+}
+
+\def\InsertTOC{%
+	\tocBuffer
+}
+
+%----------------------------------------------------------------------------------------------------
 %-------------------- titles
 %----------------------------------------------------------------------------------------------------
 
@@ -410,6 +424,8 @@
 	\pdfdest num \pdfMarkNumber xyz
 	\xdef\pdfChapterMarkNum{\the\pdfMarkNumber}%	
 	\pdfoutline goto num \pdfChapterMarkNum count 0 {@1 (@2)}%
+	%
+	\xdef\tocBuffer{\tocBuffer\MakeTOCLine{\currentLabel}{\the\pageno}}
 	%
 	\Nothing{\SetInitial@1}%
 	\line{%
