@@ -1,0 +1,103 @@
+\input ../processing/songbook
+
+
+%----------------------------------------------------------------------------------------------------
+
+
+\bsong{A caminhada}{Alberto Pinto 390-Mafamude}
+
+% song data here
+% A  B   C    D   E   F   G
+% La Si  Do   re  Mi  Fa  Sol
+
+% this will make the transposition engine use Do, Re, ...
+\FrenchChordStyle
+
+% to enable the transposition engine 
+\transposition{0}
+
+% There is however a tiny issue: if you enter Eb, it will output Re#, not Mib.
+% In fact, after a general transposition, the engine cannot know
+% whether you would have preferred to use b or #, so it consistently
+% uses just sharps...
+
+\annot{intro:}
+\bextra
+			C (0, 3, 0, 8)
+			
+            Am (0, 3, 0, 8)
+            
+            F (0, 3, 0, 8)
+            
+            G (0, 3, 0, 8)
+ 
+% this new macro does what you need
+% it is easy to change the font, the macro definition is at the end of songbook.tex          
+\comment{tab in the end of the page} 
+\eextra
+		       
+
+[C]Vem viver a amizade, [Am]que jamais tem idade
+[F]Construir o Mundo [G]à Tua vontade.
+[C]Partilhar como irmãos [Am]esta nossa canção                               
+[F]Para sempre unidos [G]o Escutismo ajudar.
+
+\ref
+[C]Tu és jovem e jovem hás-de [Am]ser
+Se queres permane[F]cer nesta u[G]nião [F]de ami[G]zade.
+[C]Tu és jovem, tens força para lu[Am]tar
+Tens a garra para [F]amar
+[G]És Caminheiro,[F]\ do mundo [G]inteiro\ \ [F]
+Serás o [G]primeiro a che[C]gar. \comment{bis}
+
+
+
+\bextra
+% should be in italic or some way different from the refrain. 
+% some separation from the refrain would be wellcomed
+
+
+\comment{repeat intro}
+
+\eextra
+
+[C]Enfrentar a caminhada [Am]que a Vida há-de propor
+[F]Construir o Mundo [G]com o seu grande valor
+[C]Liberdade de um Homem, [Am]onde a alegria chegou
+[F]E a força de gritar, [G]dum alerta que mudou.
+
+
+
+\annot{intro tab:}
+
+\bextra
+\comment{to be played in the beginning, and every time after the refrain:}
+\eextra
+\btab
+E -0---0----3----0----8----0---0----3----0----8----
+B -1-----------------------1-----------------------
+G -0-----------------------2-----------------------
+D -2-----------------------2-----------------------
+A -3-----------------------0-----------------------
+E -------------------------------------------------
+\etab
+
+\eject
+
+\btab
+E -1---0----3----0----8----3---0----3----0----8----
+B -1-----------------------3-----------------------
+G -2-----------------------0-----------------------
+D -3-----------------------0-----------------------
+A -3-----------------------2-----------------------
+E -1-----------------------3-----------------------
+\etab
+
+\esong
+
+
+\bye
+
+
+
+

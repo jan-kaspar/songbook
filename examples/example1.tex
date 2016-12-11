@@ -1,0 +1,129 @@
+\input ../processing/songbook
+
+% you can adjust the bottom of each page
+% the following line would make:
+%     left: date
+%     middle: name of current song
+%     right: page number
+\footline = {{\ChordItalicsFont \number\day. \number\month. \number\year\hfil \currentLabel \hfil\the\pageno}}
+
+% the following line makes
+%     middle: page number
+\footline = {{\hfil\the\pageno\hfil}}
+
+%----------------------------------------------------------------------------------------------------
+
+\bsong{Some title here}{Group name}
+
+% song data here
+
+% line-ends are respected
+There she stood in the doorway;  I heard the mission bell
+And I was thinking to myself 
+This could be heaven or this could be hell
+
+% an empty line starts a new verse
+Then she lit up a candle, and she showed me the way
+There were voices down the corridor, 
+I thought I heard them say...
+
+% verses are numbered automatically, if you want a refrain
+\ref
+There she stood in the doorway;  I heard the mission bell
+And I was thinking to myself 
+This could be heaven or this could be hell
+
+% if you want a custom text:
+\annot{custom}
+Then she lit up a candle, and she showed me the way
+There were voices down the corridor, 
+I thought I heard them say...
+
+% chords are entered in between [...] and will be aligned above the following syllabus
+[C]Time can [G]bring you [Ami]down,
+time can [D]bend your [G]knees
+
+% you can use CDEFGAB to enter chords, as well as # and b for sharp and flat
+[C#]Time can [Ab]bring you [A#mi]down
+
+% it doesn't matter what follows the tone (e.g. m, mi, maj, ...)
+% special base notes can be entered after "/"
+[C3-4]Time can [Gmaj]bring you [Ami/C]down
+
+% use "\ " for force spaces, e.g. lyrics starts later than a chord
+[Am]\ On a dark desert highway, [E7]\ cool wind in my hair
+
+% you and include a block typeset into two columns
+\bcol
+% 1st column data here
+[C]Time can [G]bring you [Ami]down,
+time can [D]bend your [G]knees[D, Emi, D, G]
+[C]Time can [G]break your [Ami]heart,
+have you [D]begging [G]please [D]begging [E]please
+\ncol
+% 2nd column data here
+[C]Time can [G]bring you [Ami]down,
+time can [D]bend your [G]knees[D, Emi, D, G]
+[C]Time can [G]break your [Ami]heart,
+have you [D]begging [G]please [D]begging [E]please
+\ecol
+
+% you can force page end (if you skip the \vfil, the page contents will be streched to occupy full page)
+\vfil\eject
+
+% you can have your chords transposed, enter the shift in half-tones
+\transposition{+2}
+
+[C]Time can [G]bring you [Ami]down,
+time can [D]bend your [G]knees[D, Emi, D, G]
+[C]Time can [G]break your [Ami]heart,
+have you [D]begging [G]please [D]begging [E]please
+
+% to cancel the trasposition, set the shift to 0
+\transposition{0}
+
+[C]Time can [G]bring you [Ami]down,
+time can [D]bend your [G]knees[D, Emi, D, G]
+[C]Time can [G]break your [Ami]heart,
+have you [D]begging [G]please [D]begging [E]please
+
+% this is the way to enter text in the standard TeX formatting
+\bextra
+There is something
+written here.
+And what comes below is a tab:
+\eextra
+
+% you can use tabs too
+\btab
+e -----------------0----------------------
+h --------------0-------------------------
+g -----------1----------------------------
+d --------2-------------------------------
+A -----2----------------------------------
+E --0-------------------------------------
+\etab
+
+% finally, there are symbols for repetition (the "{}" is needed to preserve the space after a command)
+before \brep repeated text \erep{} after
+
+\esong
+
+
+%----------------------------------------------------------------------------------------------------
+
+% you can include a song from an external file
+\input example1_included
+
+%----------------------------------------------------------------------------------------------------
+
+% insert table of contents
+
+\centerline{\TitleFont Table of contents}
+\vskip5mm
+
+\InsertTOC
+
+
+% stop TeX processing
+\bye
