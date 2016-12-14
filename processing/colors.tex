@@ -1,0 +1,50 @@
+% define color commands
+\ifx\pdfoutput\undefined
+	% the basic color macros
+	\def\rgb#1{\special{color push rgb #1}}
+	\def\cmyk#1{\special{color push cmyk #1}}
+	\def\nocolor{\special{color pop}}
+\else
+	\def\SetTextColor#1{\pdfliteral{#1 k}}
+	\def\SetRuleColor#1{\pdfliteral{#1 K}}
+	\def\cmyk#1{\SetTextColor{#1}\SetRuleColor{#1}}
+\fi
+
+% TODO: remove presets below
+\iffalse
+\def\cBlack{\rgb{0 0 0}}
+\def\cWhite{\rgb{1 1 1}}
+\def\cYellow{\rgb{0.9 0.9 0}}
+\def\cRed{\rgb{0.9 0 0}}
+\def\cBlue{\rgb{0 0 0.9}}
+\def\cGreen{\rgb{0 0.9 0}}
+\fi
+	
+\def\cWhite{\cmyk{0 0 0 0}}
+\def\cBlack{\cmyk{0 0 0 1}}
+\def\cGray{\cmyk{0 0 0 0.5}}
+\def\cDGray{\cmyk{0 0 0 0.7}}
+\def\cDGrayRed{\cmyk{0 0.5 0.5 0.7}}
+\def\cYellow{\cmyk{0.1 0 1 0}}
+\def\cGreen{\cmyk{0.7 0 1 0.1}}
+\def\cDarkGreen{\cmyk{0.6 0 0.7 0.5}}
+\def\cRed{\cmyk{0 0.8 0.8 0}}
+\def\cOrange{\cmyk{0. 0.35 1 0}}
+\def\cBlue{\cmyk{1 1 0 0}}
+\def\cLBlue{\cmyk{0.2 0.2 0 0}}
+\def\cLLBlue{\cmyk{0.1 0.07 0 0}}
+\def\cMagenta{\cmyk{0.3 1 0 0}}
+
+\def\cLRe{\cmyk{0 0.3 0.3 0}}
+
+% abbreviations
+\let\cYe = \cYellow
+\let\cRe = \cRed
+\let\cBl = \cBlue
+\let\cGr = \cGreen
+\let\cOr = \cOrange
+\let\cThird = \cDGrayRed
+
+% foreground and background colors
+\def\cBg{\cmyk{0 0 0 0}}
+\def\cFg{\cmyk{0 0 0 1}}
