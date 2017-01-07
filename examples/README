@@ -1,4 +1,4 @@
 To compile the examples on Linux, do
-1) export TEXINPUTS=:<path to your installation>/processing
-2) pdftex example1.tex
-3) pdftex example2.tex
+1) make sure you are in this directory ("examples")
+2) run
+  make
