@@ -1,0 +1,5 @@
+cwd=`pwd -P`
+
+export SONGBOOK_DIR="$cwd"
+
+PATH="$PATH:$cwd"

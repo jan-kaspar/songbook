@@ -1,23 +1,25 @@
-%\input utf8-t1
-\input utf8-csf
+\input utf8-t1
+%\input utf8-csf
 
-\input $script_dir/songbook
+\input songbook
 
 % for utf8-t1
-%\def\TextFontName{pplr8r } % the last space is important
-%\def\RefFontName{pplb8r }
-%\def\AnnotationFontName{pplb8r }
-%\font\TitleFont = ec-qplb-sc at 25pt
-%\font\AuthorFont = ec-qplr-sc at 18pt
-%\font\InitialFont = ec-qplb-sc at 40pt
+\def\TextFontName{ec-qplr } % the last space is important
+\def\RefFontName{ec-qplb }
+\def\AnnotationFontName{ec-qplb }
+
+\font\TitleFont = ec-qplb-sc at 25pt
+\font\AuthorFont = ec-qplr-sc at 18pt
+\font\InitialFont = ec-qplb-sc at 40pt
+\font\FootlineFont = ec-qplri at 12pt
 
 % for utf8-csf
-\def\TextFontName{cs-qplr }
-\def\RefFontName{cs-qplb }
-\def\AnnotationFontName{cs-qplb }
-\font\TitleFont = cs-qplb-sc at 25pt
-\font\AuthorFont = cs-qplr-sc at 18pt
-\font\InitialFont = cs-qplb-sc at 40pt
+%\def\TextFontName{cs-qplr }
+%\def\RefFontName{cs-qplb }
+%\def\AnnotationFontName{cs-qplb }
+%\font\TitleFont = cs-qplb-sc at 25pt
+%\font\AuthorFont = cs-qplr-sc at 18pt
+%\font\InitialFont = cs-qplb-sc at 40pt
 
 \NormalFonts
 \TextFont
@@ -53,3 +55,5 @@
 
 \def\AddPicture@1@2@3@4{%
 }
+
+\bsong{$song_name}{$author_name}

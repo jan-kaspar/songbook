@@ -1,0 +1,150 @@
+#!/bin/bash
+
+#----------------------------------------------------------------------------------------------------
+# defaults
+
+conffile="songbook.conf"
+makefile="makefile"
+
+input_tex="data.tex"
+input_ly="data.ly"
+
+template_tex="template.tex"
+template_ly="template.ly"
+
+#----------------------------------------------------------------------------------------------------
+# parse command line
+
+#----------------------------------------------------------------------------------------------------
+# run processing
+
+# process parent directories
+buf=`pwd`
+
+hierarchy=()
+while [ -n "$buf" ]
+do
+	hierarchy+=("$buf")
+	buf=${buf%/*}
+done
+
+for (( idx=${#hierarchy[@]}-1 ; idx>=0 ; idx-- ))
+do
+	file="${hierarchy[idx]}/$conffile"
+
+	if [ -f "$file" ]
+	then
+		source "$file"
+	fi
+done
+
+# process children directory structure
+
+function PrepareDir()
+{
+	local dir="$1"
+
+	echo "PrepareDir: $dir"
+
+	# determine song and author names
+	local buf="$dir"
+	local default_song=${buf##*/}
+	buf=${buf%/*}
+	local default_author=${buf##*/}
+
+	local final_song="${song_name-$default_song}"
+	local final_author="${author_name-$default_author}"
+
+	# make build directory
+	rm -rf "$dir/.build"
+	mkdir -p "$dir/.build"
+
+	# make tex build source
+	cat "$SONGBOOK_DIR/$template_tex" | sed "\
+			s|\$song_name|$final_song|;\
+			s|\$author_name|$final_author|;\
+		" > "$dir/.build/header.tex"
+
+	# need default data.tex ?
+	if [ -f "$dir/$input_ly" -a ! -f "$dir/$input_tex" ]
+	then
+		echo "    Making default $input_tex"
+		echo "\\IncludeLilypond" > "$dir/$input_tex"
+	fi
+	
+	# make Lilypond build source
+	cat "$SONGBOOK_DIR/$template_ly" | sed "\
+			s|\$input|../data.ly|;\
+		" > "$dir/.build/lilypond.ly"
+
+	# make basic build file
+	(
+		echo ".PHONY: pdf"
+		echo ""
+		echo "first: pdf"
+		echo ""
+		echo "pdf: score.pdf"
+		echo ""
+		echo "score.pdf : .build/compile.pdf"
+		echo "	@cp .build/compile.pdf score.pdf"
+		echo ""
+		echo ".build/compile.pdf : $input_tex"
+		echo "	@echo \"running TeX\""
+		echo "	@cp \"$dir/.build/header.tex\" \"$dir/.build/compile.tex\""
+		echo "	@cat \"$dir/$input_tex\" >> \"$dir/.build/compile.tex\""
+		echo "	@echo \"\\esong\\end\" >> \"$dir/.build/compile.tex\""
+		echo "	@cd \"$dir/.build\"; TEXINPUTS=:$SONGBOOK_DIR encpdftex \"compile.tex\" &> /dev/null || { echo \"ERROR in TeX\"; cat compile.log; exit 1; }"
+	) > "$dir/$makefile"
+
+	# add Lylipond rules to the makefile
+	if [ -f "$dir/$input_ly" ]
+	then
+		(
+			echo ""
+			echo ".build/compile.pdf : .build/lilypond.pdf"
+			echo ""
+			echo ".build/lilypond.pdf : $input_ly"
+			echo "	@echo \"Running Lilypond\""
+			echo "	@cd \"$dir/.build\"; lilypond -dbackend=eps \"lilypond.ly\" &> \"lilypond.log\" || { echo \"ERROR in Lilypond\"; cat \"lilypond.log\"; exit 2; }"
+			echo ""
+			echo ".PHONY: mp3"
+			echo ""
+			echo "mp3: midi.mp3"
+			echo ""
+			echo "midi.mp3 : .build/lilypond.pdf"
+			echo "	@echo \"Making mp3\""
+			echo "	@cd \"$dir/.build\"; timidity \"lilypond.midi\" -Ow -o midi.wav &> midi.log && lame -V9 midi.wav ../midi.mp3 &>> midi.log && rm midi.wav && rm midi.log"
+		) >> "$dir/$makefile"
+	fi
+}
+
+function ProcessDir()
+{
+	local dir="$1"
+
+	(
+
+	# load config if exists
+	file="$dir/$conffile"
+	if [ -f "$file" ]
+	then
+		source "$file"
+	fi
+
+	# is data directory
+	if [ -f "$dir/$input_tex" -o -f "$dir/$input_ly" ]
+	then
+		PrepareDir "$dir"
+	fi
+
+	# recursion to lower directory levels
+	find "$dir" -mindepth 1 -maxdepth 1 -type d|while read subdir
+	do
+		ProcessDir "$subdir"
+	done
+
+	)
+}
+
+cwd=`pwd`
+ProcessDir "$cwd"

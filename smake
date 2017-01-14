@@ -1,0 +1,8 @@
+#!/bin/bash
+
+find . -name makefile | while read f
+do
+	d=`dirname "$f"`
+	echo ">> $d"
+	make -C "$d"
+done

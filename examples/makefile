@@ -6,5 +6,5 @@ all: \
 
 example1.pdf : example1_included.tex
 
-%.pdf : %.tex ../processing/songbook.tex
-	TEXINPUTS=:../processing encpdftex "$<"
+%.pdf : %.tex ../songbook.tex
+	TEXINPUTS=:../ encpdftex "$<"
