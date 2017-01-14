@@ -17,3 +17,6 @@
 
 makefile
 !examples/makefile
+
+data-imported
+data-test

@@ -1,0 +1,26 @@
+%\input base_text
+
+\footline={}
+
+\font\TitleFont = ec-qplb-sc at 20pt
+
+\advance\voffset by -5mm
+\advance\vsize by 30mm
+
+\def\bla{/home/jkaspar/fun/songbook/local/data/chrétien/Taizé/Heureux qui s’abandonne à toi/.build/compile-1.pdf}
+
+\input utf8-t1
+
+\def\IncludeOne{
+	\centerline{\TitleFont Heureux qui s’abandonne à toi}
+	\vskip2mm
+	\line{\pdfximage {\bla}\pdfrefximage\pdflastximage\hss}%
+	\vskip3.0cm
+}
+
+
+\IncludeOne
+
+\IncludeOne
+
+\bye
