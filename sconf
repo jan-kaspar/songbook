@@ -89,7 +89,7 @@ function PrepareDir()
 		echo "	@cp .build/compile.pdf score.pdf"
 		echo ""
 		echo ".build/compile.pdf : $input_tex"
-		echo "	@echo \"running TeX\""
+		echo "	@echo \"Running TeX\""
 		echo "	@cp \"$dir/.build/header.tex\" \"$dir/.build/compile.tex\""
 		echo "	@cat \"$dir/$input_tex\" >> \"$dir/.build/compile.tex\""
 		echo "	@echo \"\\esong\\end\" >> \"$dir/.build/compile.tex\""
