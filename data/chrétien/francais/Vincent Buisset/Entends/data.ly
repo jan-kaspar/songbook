@@ -97,7 +97,7 @@ FullLayout = {
 	\new StaffGroup <<
 		\new ChordNames {
 			\override ChordNames.ChordName          #'color = #(x11-color 'red)
-			\harmonies
+			\transpose c c { \harmonies }
 		}
 
 		\new Staff <<
@@ -106,8 +106,7 @@ FullLayout = {
 			\set Staff.midiInstrument = #"choir aahs"
 			\set Staff.midiMinimumVolume = #0.1
 	  		\set Staff.midiMaximumVolume = #0.99
-  			\new Voice
-    			{ \melody }
+			\new Voice { \transpose c c { \melody } }
 			\addlyrics { \text }
 		>>
 
@@ -115,10 +114,9 @@ FullLayout = {
 		  	\set Staff.instrumentName = #"basse"
 		  	\set Staff.shortInstrumentName = #"basse"
 			\set Staff.midiInstrument = #"contrabass"
-			\set Staff.midiMinimumVolume = #0.8
+			\set Staff.midiMinimumVolume = #0.0
 	  		\set Staff.midiMaximumVolume = #1.0
-  			\new Voice
-    			{ \base }
+			\new Voice { \transpose c c { \base } }
 		>>
 
 		\new Staff <<
@@ -127,8 +125,8 @@ FullLayout = {
 			\set Staff.midiInstrument = #"flute"
 			%\set Staff.midiMinimumVolume = #0.0
 	  		%\set Staff.midiMaximumVolume = #0.0
-  			\new Voice { \voiceOne \flute_i }
-  			\new Voice { \voiceTwo \flute_ii }
+			\new Voice { \transpose c c { \voiceOne \flute_i } }
+			\new Voice { \transpose c c { \voiceTwo \flute_ii } }
 		>>
 
 		\new Staff <<
@@ -137,7 +135,7 @@ FullLayout = {
 			\set Staff.midiInstrument = #"violin"
 			\set Staff.midiMinimumVolume = #0.0
 	  		\set Staff.midiMaximumVolume = #0.6
-  			\new Voice { \violin_i }
+			\new Voice { \transpose c c { \violin_i } }
 		>>
 
 		\new Staff <<
@@ -146,7 +144,7 @@ FullLayout = {
 			\set Staff.midiInstrument = #"violin"
 			\set Staff.midiMinimumVolume = #0.0
 	  		\set Staff.midiMaximumVolume = #0.6
-  			\new Voice { \violin_ii }
+			\new Voice { \transpose c c { \violin_ii } }
 		>>
 
 	>>

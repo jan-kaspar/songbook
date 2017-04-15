@@ -156,8 +156,8 @@ harmonies = \chordmode {
 FullLayout = {
 	\new ChoirStaff <<
 		\new ChordNames {
-			\override ChordNames.ChordName          #'color = #(x11-color 'red)
-			\harmonies
+			%\override ChordNames.ChordName          #'color = #(x11-color 'red)
+			\transpose c c { \harmonies }
 		}
 
 		\new Staff <<
@@ -166,8 +166,7 @@ FullLayout = {
 			\set Staff.midiInstrument = #"choir aahs"
 			\set Staff.midiMinimumVolume = #0.1
 	  		\set Staff.midiMaximumVolume = #0.99
-  			\new Voice
-    			{ \melody }
+			\new Voice { \transpose c c { \melody } }
 			\addlyrics { \text }
 		>>
 
@@ -177,9 +176,7 @@ FullLayout = {
 			\set Staff.midiInstrument = #"violin"
 			\set Staff.midiMinimumVolume = #0.0
 	  		\set Staff.midiMaximumVolume = #0.5
-  			\new Voice { \violin_A_i }
-  			%\new Voice { \voiceOne \flute_i }
-			%\new Voice { \voiceTwo \flute_ii }
+			\new Voice { \transpose c c { \violin_A_i } }
 		>>
 
 		\new Staff <<
@@ -188,17 +185,7 @@ FullLayout = {
 			\set Staff.midiInstrument = #"violin"
 			\set Staff.midiMinimumVolume = #0.0
 	  		\set Staff.midiMaximumVolume = #0.5
-  			\new Voice { \violin_A_ii }
+			\new Voice { \transpose c c { \violin_A_ii } }
 		>>
-%
-%		\new Staff <<
-%		  	\set Staff.instrumentName = #"basse"
-%			\set Staff.midiInstrument = #"contrabass"
-%			\set Staff.midiMinimumVolume = #0.8
-%	  		\set Staff.midiMaximumVolume = #1.0
-%  			\new Voice
-%    			{ \base }
-%		>>
-
 	>>
 }

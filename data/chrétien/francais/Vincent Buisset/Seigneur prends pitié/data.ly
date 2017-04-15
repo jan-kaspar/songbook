@@ -117,7 +117,7 @@ FullLayout = {
 	\new StaffGroup <<
 		\new ChordNames {
 			%\override ChordNames.ChordName          #'color = #(x11-color 'red)
-			\harmonies
+			\transpose c c { \harmonies }
 		}
 
 		\new Staff <<
@@ -126,10 +126,10 @@ FullLayout = {
 			\set Staff.midiInstrument = #"choir aahs"
 			\set Staff.midiMinimumVolume = #0.1
 	  		\set Staff.midiMaximumVolume = #0.99
-  			\new Voice { \voiceOne \melody }
+			\new Voice { \transpose c c { \voiceOne \melody } }
 			\addlyrics { \texti }
 			\addlyrics { \textii }
-  			\new Voice { \voiceTwo \melody_ii }
+			\new Voice { \transpose c c { \voiceTwo \melody_ii } }
 		>>
 
 		\new Staff <<
@@ -138,8 +138,8 @@ FullLayout = {
 			\set Staff.midiInstrument = #"violin"
 			\set Staff.midiMinimumVolume = #0.0
 	  		\set Staff.midiMaximumVolume = #0.5
-  			\new Voice { \voiceOne \violin_ii }
-			\new Voice { \voiceTwo \violin_i }
+			\new Voice { \transpose c c { \voiceOne \violin_ii } }
+			\new Voice { \transpose c c { \voiceTwo \violin_i } }
 		>>
 
 		\new Staff <<
@@ -148,7 +148,7 @@ FullLayout = {
 			\set Staff.midiInstrument = #"cello"
 			\set Staff.midiMinimumVolume = #0.1
 	  		\set Staff.midiMaximumVolume = #0.5
-  			\new Voice { \violin_iii }
+			\new Voice { \transpose c c { \violin_iii } }
 		>>
 
 	>>

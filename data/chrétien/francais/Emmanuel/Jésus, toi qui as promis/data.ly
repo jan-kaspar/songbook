@@ -57,7 +57,7 @@ FullLayout = {
 	\new ChoirStaff <<
 		\new ChordNames {
 		  \set chordChanges = ##t
-		  \harmonies
+		  \transpose d d { \harmonies }
 		}
 		\new Staff <<
 			\set Staff.midiInstrument = #"flute"
@@ -72,9 +72,9 @@ FullLayout = {
 			%\set Staff.midiMinimumVolume = #0.1
 	  		\set Staff.midiMaximumVolume = #0.8
   			\new Voice = "third"
-    			{ \voiceOne \transpose c' c' { \third } }
+    			{ \voiceOne \transpose d d { \third } }
   			\new Voice= "fourth"
-    			{ \voiceTwo \transpose c' c' { \fourth } }
+    			{ \voiceTwo \transpose d d { \fourth } }
 		>>
 	>>
 }
