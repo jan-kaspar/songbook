@@ -50,23 +50,24 @@ harmonies = \chordmode {
 
 FullLayout = {
 	\new ChoirStaff <<
-		\new ChordNames {{ \harmonies } }
+		\new ChordNames {
+			\transpose c c { \harmonies }
+		}
+
 		\new Staff <<
 			\set Staff.midiInstrument = #"flute"
   			\new Voice = "first"
-    			{ \voiceOne  \transpose d d { \first } }
+				{ \voiceOne  \transpose c c { \first } }
 			\addlyrics { \text }
   			\new Voice= "second"
-    			{ \voiceTwo  \transpose d d { \second } }
+				{ \voiceTwo  \transpose c c { \second } }
 		>>
 		\new Staff <<
 			\set Staff.midiInstrument = #"flute"
   			\new Voice = "third"
-    			{ \voiceOne \transpose c' c' { \third } }
+				{ \voiceOne \transpose c c { \third } }
   			\new Voice= "fourth"
-    			{ \voiceTwo \transpose c' c' { \fourth } }
+				{ \voiceTwo \transpose c c { \fourth } }
 		>>
 	>>
 }
-
-TextBelow = \markup{}
