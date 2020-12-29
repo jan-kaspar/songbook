@@ -27,7 +27,7 @@
 	\font\ChordScriptFont = cs-qplr at 9pt
 	\font\AnnotationFont = \AnnotationFontName at 12pt
 	% TODO
-	\font\TabFont = cs-qplr at 12pt
+	\font\TabFont = t1-zi4r-7 at 12pt
 	%\font\TabFont = ec-inconsolata at 12pt
 	\font\mathSymbFont = cmmi12 at 12pt
 	\textfont1=\mathSymbFont
@@ -178,6 +178,25 @@
 			\or La%
 			\or La$\sharp$%
 			\or Si%
+		\fi
+	}
+}
+
+\def\RelativeChordStyle{%
+	\def\ToneCodeToLabel{%
+		\ifcase\ChordCode%
+				I%
+			\or I$\sharp$%
+			\or II%
+			\or II$\sharp$%
+			\or III%
+			\or IV%
+			\or IV$\sharp$%
+			\or V%
+			\or V$\sharp$%
+			\or VI%
+			\or VI$\sharp$%
+			\or VII%
 		\fi
 	}
 }

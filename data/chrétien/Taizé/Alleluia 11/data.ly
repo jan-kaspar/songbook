@@ -83,5 +83,3 @@ FullLayout = {
 		>>
 	>>
 }
-
-TextBelow = \markup{}
