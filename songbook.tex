@@ -182,6 +182,25 @@
 	}
 }
 
+\def\PortugueseChordStyle{%
+	\def\ToneCodeToLabel{%
+		\ifcase\ChordCode%
+				Dó%
+			\or Dó$\sharp$%
+			\or Ré%
+			\or Ré$\sharp$%
+			\or Mi%
+			\or Fá%
+			\or Fá$\sharp$%
+			\or Sol%
+			\or Sol$\sharp$%
+			\or Lá%
+			\or Lá$\sharp$%
+			\or Si%
+		\fi
+	}
+}
+
 \def\RelativeChordStyle{%
 	\def\ToneCodeToLabel{%
 		\ifcase\ChordCode%
